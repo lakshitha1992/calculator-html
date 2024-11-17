@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator & Currency Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Scientific Calculator styling */
+        .calculator {
+            background: linear-gradient(145deg, #1e2a47, #4e6179);
+            border-radius: 15px;
+            padding: 30px;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        #display {
+            width: 100%;
+            height: 50px;
+            font-size: 30px;
+            text-align: right;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: #333;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .button {
+            background: #5f6c7b;
+            color: white;
+            font-size: 20px;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: #4b5563;
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+            background: #434c58;
+        }
+
+        .button.resuilt {
+            background: #4CAF50;
+            grid-column: span 2;
+        }
+
+        .button.resuilt:hover {
+            background: #45a049;
+        }
+
+        .button.resuilt:active {
+            background: #399d41;
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
+        /* Currency Converter styling */
+        .currency-container {
+            background: linear-gradient(145deg, #1e2a47, #4e6179);
+            border-radius: 15px;
+            padding: 30px;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .currency-input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .currency-result {
+            font-size: 18px;
+            padding: 10px;
+            background: #1e2a47;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        /* Media Query for responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .calculator, .currency-container {
+                width: 100%;
+                max-width: 350px;
+                padding: 20px;
+            }
+
+            #display {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Scientific Calculator Section -->
+        <div class="calculator">
+            <input type="text" id="display" disabled />
+            <div class="buttons">
+                <button class="button" onclick="appendValue('7')">7</button>
+                <button class="button" onclick="appendValue('8')">8</button>
+                <button class="button" onclick="appendValue('9')">9</button>
+                <button class="button" onclick="appendValue('+')">+</button>
+
+                <button class="button" onclick="appendValue('4')">4</button>
+                <button class="button" onclick="appendValue('5')">5</button>
+                <button class="button" onclick="appendValue('6')">6</button>
+                <button class="button" onclick="appendValue('-')">-</button>
+
+                <button class="button" onclick="appendValue('1')">1</button>
+                <button class="button" onclick="appendValue('2')">2</button>
+                <button class="button" onclick="appendValue('3')">3</button>
+                <button class="button" onclick="appendValue('*')">X</button>
+
+                <button class="button" onclick="appendValue('0')">0</button>
+                <button class="button" onclick="appendValue('.')">.</button>
+                <button class="button" onclick="clearDisplay()">C</button>
+                <button class="button" onclick="appendValue('/')">÷</button>
+            
+                <button class="button" onclick="appendValue('**')">^</button>
+                <button class="button" onclick="appendValue('Math.sqrt(')">√</button>
+                <button class="button resuilt" onclick="calculateResult()">=</button>
+            </div>
+        </div>
+
+        <!-- Currency Converter Section -->
+        <div class="currency-container">
+            <input type="number" id="currencyAmount" class="currency-input" placeholder="Amount" />
+            <select id="currencyFrom" class="currency-input">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="INR">INR</option>
+            </select>
+            <select id="currencyTo" class="currency-input">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="INR">INR</option>
+            </select>
+            <div class="currency-result" id="currencyResult">Conversion result will appear here</div>
+        </div>
+    </div>
+
+    <script>
+        // Scientific Calculator functionality
+        function appendValue(value) {
+            document.getElementById("display").value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById("display").value = '';
+        }
+
+        function calculateResult() {
+            let expression = document.getElementById("display").value;
+            try {
+                let result = eval(expression);
+                document.getElementById("display").value = result;
+            } catch (e) {
+                document.getElementById("display").value = "Error";
+            }
+        }
+
+        // Currency Converter functionality
+        async function convertCurrency() {
+            const amount = document.getElementById('currencyAmount').value;
+            const fromCurrency = document.getElementById('currencyFrom').value;
+            const toCurrency = document.getElementById('currencyTo').value;
+
+            if (!amount) {
+                document.getElementById('currencyResult').textContent = 'Please enter an amount!';
+                return;
+            }
+
+            const query = `${amount} ${fromCurrency} to ${toCurrency}`;
+            const apiUrl = `https://www.google.com/search?q=${query}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const text = await response.text();
+
+                // Parse the result from Google's search result
+                const result = /([0-9,]+\.\d+|\d+(\.\d+)?)\s+<b>([A-Z]{3})<\/b>/g.exec(text);
+
+                if (result) {
+                    document.getElementById('currencyResult').textContent = `${amount} ${fromCurrency} = ${result[1]} ${toCurrency}`;
+                } else {
+                    document.getElementById('currencyResult').textContent = 'Unable to fetch conversion rates';
+                }
+            } catch (error) {
+                document.getElementById('currencyResult').textContent = 'Error fetching currency data.';
+            }
+        }
+
+        // Automatically update conversion when any field changes
+        document.getElementById('currencyAmount').addEventListener('input', convertCurrency);
+        document.getElementById('currencyFrom').addEventListener('change', convertCurrency);
+        document.getElementById('currencyTo').addEventListener('change', convertCurrency);
+    </script>
+</body>
+</html>
